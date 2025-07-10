@@ -11,7 +11,9 @@ const deleteUser = async (req, res) => {
 };
 
 // GET ALL USERS
+
 const getAllUsers = async (req, res) => {
+    console.log("all users")
     try {
         const users = await User.find().sort({ createdAt: -1 });
         res.status(200).json(users);

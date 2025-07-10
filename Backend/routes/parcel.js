@@ -8,15 +8,17 @@ const {
     getUserParcel,
     deleteParcel
 } = require('../controllers/parcel');
+const { verify } = require('jsonwebtoken');
+const { verifyToken, verifyTokenAndAuthorization } = require('../middlewares/verifyToken');
 
 
 // add parcel
 
-router.post("/",createParcel)
+router.post("/",verifyToken,createParcel)
 
 // get all parcels
 
-router.get("/",getAllParcels) 
+router.get("/",verifyTokenAndAuthorization,getAllParcels) 
 
 //Update parcel
 
