@@ -61,5 +61,5 @@ const loginUser = async (req, res) => {
     }
 };
 
-// ✅ EXPORTS (compatible CommonJS)
+//  EXPORTS (compatible CommonJS)
 module.exports = { registerUser, loginUser };
