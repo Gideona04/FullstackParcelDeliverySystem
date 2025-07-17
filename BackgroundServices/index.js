@@ -4,6 +4,9 @@ const dotenv = require('dotenv');
 const cron = require('node-cron');
 const mongoose = require('mongoose');
 const { sendWelcomeEmail } = require('./EmailService/WelcomeEmail');
+const { SendParcelDeliveredParcel } = require('./EmailService/DeliveredParcel');
+const { SendParcelPendingEmail } = require('./EmailService/PendingParcel');
+
 
 
 dotenv.config();
@@ -22,6 +25,10 @@ const run = () => {
     cron.schedule('* * * * *', async () => {
         console.log("⏰ Tâche exécutée à", new Date().toLocaleString());
         await sendWelcomeEmail();
+        await SendParcelDeliveredParcel();
+        await SendParcelPendingEmail();
+        
+        
     });
 };
 

@@ -18,7 +18,7 @@ router.post("/",verifyToken,createParcel)
 
 // get all parcels
 
-router.get("/",verifyTokenAndAuthorization,getAllParcels) 
+router.get("/",getAllParcels) 
 
 //Update parcel
 
