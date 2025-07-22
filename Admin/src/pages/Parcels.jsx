@@ -1,5 +1,8 @@
 import { DataGrid, renderActionsCell} from '@mui/x-data-grid';
 import {FaTrash} from "react-icons/fa"
+import { Link } from 'react-router-dom';
+
+
 
 const Parcels = () => {
 
@@ -49,7 +52,9 @@ const columns = [
     <div className="m-[30px] bg-[#fff] p-[20px]">
       <div className="flex item-center justify-between">
       <h1 className="m-[20px] text-[25px]">Tous les Colis</h1>
+      <Link to ="/NewParcel">
       <button className="bg-[#1e1e1e] text-[#fff] p-[13px] cursor-pointer m-[10px]">Nouveau Colis</button>
+      </Link>
     </div>
     <DataGrid 
     rows={rows} 
