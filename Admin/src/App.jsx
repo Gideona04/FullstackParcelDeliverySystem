@@ -7,6 +7,8 @@ import Navbar from './components/Navbar';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
 import Users from './pages/Users';
+import Login from './pages/Login';
+
 function App() {
 
   const Layout = () => {
@@ -14,7 +16,7 @@ function App() {
       <div>
          <Navbar/>
          <div className='flex'>
-          <div className='w-[20%]'>
+          <div className='w-[20%] '>
             <Menu/>
           </div>
           <div className='w-[80%]'>
@@ -45,6 +47,10 @@ function App() {
 
         ]
       },
+      {
+        path: "/login",
+        element:<Login/>
+      }
       
 
   ])

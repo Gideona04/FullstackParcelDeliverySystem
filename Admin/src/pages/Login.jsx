@@ -2,7 +2,7 @@
 
 const Login = () => {
   return (
-    <div>Login</div>
+    <div className="text-[30px] text-[white]">Login</div>
   )
 }
 

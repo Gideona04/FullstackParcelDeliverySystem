@@ -3,16 +3,8 @@
 @tailwind utilities;
 
 
-h1 {
-  color: aliceblue;
-  font-size: 1.875rem; 
-  line-height: 2.25rem;
-}
-div {
-color: aliceblue;
-  font-size: 1.575rem; 
-  line-height: 2.05rem;
-}
+
+
 
 body {
   margin: 0;
