@@ -1,56 +1,70 @@
-import { DataGrid, renderActionsCell} from '@mui/x-data-grid';
-import {FaTrash} from "react-icons/fa"
+import { DataGrid } from '@mui/x-data-grid';
+import { useState, useEffect } from 'react';
+import { FaTrash } from "react-icons/fa";
 import { Link } from 'react-router-dom';
-
+import { publicRequest } from '../requestMethods'; // Assure-toi que ce chemin est bon
 
 const Users = () => {
+  const [data, setData] = useState([]);
 
-  const rows = [
-  { id: 1, fullName: 'Jean Rakoto', email: 'jean.rakoto@gmail.com', age: 30, country: 'Madagascar', address: 'Lot II F 45 Ampasampito' },
-  { id: 2, fullName: 'Hanta Rabe', email: 'hanta.rabe@yahoo.com', age: 28, country: 'Madagascar', address: 'Rue Ravelojaona, Fianarantsoa' },
-  { id: 3, fullName: 'Kevin Andry', email: 'kevin.andry@outlook.com', age: 25, country: 'France', address: '12 Rue de Lyon, Paris' },
-  { id: 4, fullName: 'Mireille Zo', email: 'mireille.zo@gmail.com', age: 35, country: 'Madagascar', address: 'Ambalavao, Lot B 103' },
-  { id: 5, fullName: 'Joel Randria', email: 'joel.randria@gmail.com', age: 22, country: 'Canada', address: '133 Rue St-Hubert, Montreal' },
-  { id: 6, fullName: 'Fanilo Niry', email: 'fanilo.niry@gmail.com', age: 31, country: 'Madagascar', address: 'Anosizato Andrefana, Tana' },
-  { id: 7, fullName: 'Sarah Nirina', email: 'sarah.nirina@gmail.com', age: 27, country: 'USA', address: '45 Oak Street, New York' },
-  { id: 8, fullName: 'Tojo Mamy', email: 'tojo.mamy@gmail.com', age: 33, country: 'Madagascar', address: 'Ambanja, quartier Avaradrova' },
-  { id: 9, fullName: 'Lisa Kanto', email: 'lisa.kanto@gmail.com', age: 29, country: 'Madagascar', address: 'Lot 145 Tsimbazaza' },
-  { id: 10, fullName: 'Alain Remy', email: 'alain.remy@gmail.com', age: 40, country: 'Germany', address: 'Berliner Strasse 77, Berlin' },
-];
-const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'fullName', headerName: 'Nom et Prenom', width: 180 },
-  { field: 'email', headerName: 'Email', width: 220 },
-  { field: 'age', headerName: 'Age', width: 100 },
-  { field: 'country', headerName: 'Pays', width: 150 },
-  { field: 'address', headerName: 'Address', width: 250 },
-  { field: 'delete', headerName: 'Supprimer', width: 150,
-    rendercell: () =>{
-      return(
-        <>
-        <FaTrash/>
-        </>
-      )
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const res = await publicRequest.get("/users");
+        const usersWithId = res.data.map((user) => ({
+          ...user,
+          id: user._id 
+        }));
+        setData(usersWithId);
+      } catch (err) {
+        console.error("Erreur lors de la récupération des utilisateurs :", err);
+      }
+    };
+
+    getUsers();
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      await publicRequest.delete(`/users/${id}`);
+      setData(data.filter((item) => item._id !== id));
+      window.location.reload();
+    } catch (error) {
+      console.log("Erreur lors de la suppression de l'utilisateur :", error);
     }
-  },
-];
+  }
 
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'fullName', headerName: 'Nom et Prénom', width: 180 },
+    { field: 'email', headerName: 'Email', width: 220 },
+    { field: 'age', headerName: 'Âge', width: 100 },
+    { field: 'country', headerName: 'Pays', width: 150 },
+    { field: 'address', headerName: 'Adresse', width: 250 },
+    {
+      field: 'delete', headerName: 'Supprimer', width: 150,
+      renderCell: (params) => (
+        <FaTrash className='text-[#FF0100] cursor-pointer m-[2px]' onClick={() =>handleDelete(params.row.id)} />
+      )
+    },
+  ];
 
   return (
     <div className="m-[30px] bg-[#fff] p-[20px]">
       <div className="flex item-center justify-between">
-      <h1 className="m-[20px] text-[25px]">Tous les Utilisareurs</h1>
-      <Link to="/newuser">
-      <button className="bg-[#1e1e1e] text-[#fff] p-[13px] cursor-pointer m-[10px]">Nouveau Utilisateur</button>
-      </Link>
+        <h1 className="m-[20px] text-[25px]">Tous les Utilisateurs</h1>
+        <Link to="/newuser">
+          <button className="bg-[#1e1e1e] text-[#fff] p-[13px] cursor-pointer m-[10px]">Nouveau Utilisateur</button>
+        </Link>
+      </div>
+      <DataGrid
+        rows={data}
+        columns={columns}
+        checkboxSelection
+        getRowId={(row) => row._id}
+      />
     </div>
-    <DataGrid 
-    rows={rows} 
-    columns={columns}
-    checkboxSelection
-     />
-    </div>
-  )
+  );
 }
 
-export default Users
+export default Users;

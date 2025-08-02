@@ -14,7 +14,7 @@ const { verifyToken, verifyTokenAndAuthorization } = require('../middlewares/ver
 
 // add parcel
 
-router.post("/",verifyToken,createParcel)
+router.post("/",createParcel)
 
 // get all parcels
 

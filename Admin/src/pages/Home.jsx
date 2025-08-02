@@ -62,9 +62,9 @@ const Home = () => {
       series={[
         {
           data: [
-            { id: 0, value: 10, label: 'series A' },
-            { id: 1, value: 15, label: 'series B' },
-            { id: 2, value: 25, label: 'series C' },
+            { id: 0, value: 10, label: 'Colis en attentes' },
+            { id: 1, value: 15, label: 'Colis livrés' },
+            { id: 2, value: 2, label: 'Colis refusés' },
           ],
           innerRadius: 30,
           outerRadius: 100,

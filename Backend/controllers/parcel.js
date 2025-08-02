@@ -2,15 +2,16 @@ const Parcel = require('../models/Parcel');
 
 //CREATE PARCEL
  const createParcel = async (req, res) => {
-
-    try {
-        const newParcel = new Parcel(req.body);
-        const Parcel = await newParcel.save();
-        res.status(200).json(Parcel);
-    } catch (error) {
-        res.status(500).json(error );
-    }
-}
+  try {
+    console.log("📦 Données reçues pour création de colis :", req.body);
+    const newParcel = new Parcel(req.body);
+    const savedParcel = await newParcel.save();
+    res.status(201).json(savedParcel);
+  } catch (error) {
+    console.error("❌ Erreur lors de l'ajout du colis :", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 //GET ALL PARCELS
  const getAllParcels = async (req, res) => {
@@ -24,13 +25,17 @@ const Parcel = require('../models/Parcel');
 
 //UPDATE PARCEL
  const updateParcel = async (req, res) => {
-    try {
-        const parcel = await Parcel.findById(req.params.id, );
-        res.status(200).json(parcel);
-    } catch (error) {
-        res.status(500).json(error)
-    }
-}
+  try {
+    const updatedParcel = await Parcel.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    );
+    res.status(200).json(updatedParcel);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
 //GET ONE PARCEL 
  const getOneParcel = async (req, res) => {
