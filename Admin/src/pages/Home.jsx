@@ -1,7 +1,42 @@
 import {HiArrowSmallUp,HiArrowLongDown} from "react-icons/hi2"
 import { PieChart } from '@mui/x-charts/PieChart';
+import { useEffect,useState } from "react";
+import { publicRequest } from '../requestMethods';
 
 const Home = () => {
+const [parcels, setParcels] = useState([]);
+const [users, setUsers] = useState([]);
+
+const usersCount = users.length;
+const deliveredCount = parcels.filter(parcel => parcel.status === 3).length;
+const pendingCount = parcels.filter(parcel => parcel.status === 1).length;
+
+useEffect(() =>{
+  const getParcels = async () => {
+    try {
+      const res = await publicRequest.get("/parcels");
+      setParcels(res.data);
+    } catch (err) {
+      console.error("Erreur lors de la récupération des colis :", err);
+    }
+  }
+  getParcels();
+},[]);
+
+
+useEffect(() =>{
+  const getUsers = async () => {
+    try {
+      const res = await publicRequest.get("/users");
+      setUsers(res.data);
+    } catch (err) {
+      console.error("Erreur lors de la récupération des utilisateur :", err);
+    }
+  }
+  getUsers();
+},[]);
+
+
   return (
     <div className="min-h-screen bg-[#242424]">
       <div className="flex items-center justify-start h-full ">
@@ -13,7 +48,7 @@ const Home = () => {
               <HiArrowSmallUp className="text-[31px] text-[#00FF10] mt-[20px]"/> 
               <HiArrowLongDown className="text-[31px] text-[#FF0100] mt-[20px]"/>
               <div className="flex flex-col items-center mt-[20px] text-[23px]">
-                <span>200</span>
+                <span>{usersCount}</span>
               </div>
                 
             </div>
@@ -28,7 +63,7 @@ const Home = () => {
               <HiArrowSmallUp className="text-[31px] text-[#00FF10] mt-[20px]"/> 
               <HiArrowLongDown className="text-[31px] text-[#FF0100] mt-[20px]"/>
               <div className="flex flex-col items-center mt-[20px] text-[23px]">
-                <span>2000</span>
+                <span>{deliveredCount}</span>
               </div>
                 
             </div>
@@ -43,7 +78,7 @@ const Home = () => {
               <HiArrowSmallUp className="text-[31px] text-[#00FF10] mt-[20px]"/> 
               <HiArrowLongDown className="text-[31px] text-[#FF0100] mt-[20px]"/>
               <div className="flex flex-col items-center mt-[20px] text-[23px]">
-                <span>100</span>
+                <span>{pendingCount}</span>
               </div>
                 
             </div>
@@ -62,9 +97,9 @@ const Home = () => {
       series={[
         {
           data: [
-            { id: 0, value: 10, label: 'Colis en attentes' },
-            { id: 1, value: 15, label: 'Colis livrés' },
-            { id: 2, value: 2, label: 'Colis refusés' },
+            { id: 0, value: pendingCount, label: 'Colis en attentes' },
+            { id: 1, value: deliveredCount, label: 'Colis livrés' },
+            { id: 2, value: usersCount, label: 'Utilisateurs' },
           ],
           innerRadius: 30,
           outerRadius: 100,

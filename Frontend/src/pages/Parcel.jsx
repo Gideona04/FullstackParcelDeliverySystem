@@ -1,8 +1,32 @@
 import { Link } from "react-router-dom"
 import {FaArrowLeft, FaTrash} from "react-icons/fa"
+import { useLocation } from "react-router-dom";
+import { publicRequest } from "../requestMethods";
+
+import { useEffect, useState } from "react";
+
 
 
 const Parcel = () => {
+  const location = useLocation();
+  const [parcel, setParcel] = useState({});
+  const parcelId = location.pathname.split("/")[2];
+  useEffect(() => {
+    const getParcel = async () => {
+      try {
+        
+        const res = await publicRequest.get("/parcels/find/" + parcelId);
+
+        setParcel(res.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération du colis :", error);
+      }
+    }
+
+    getParcel();
+
+  }, [parcelId])
+
   return (
     <div className="flex flex-col items-center justify-center mt-[3%] mr-[5%] ml-[5%]">
 
@@ -16,33 +40,35 @@ const Parcel = () => {
 
         <div className="flex-1">
           <ul className="m-[3px] text-[#444] list-none p-[15px]">
-           <li className="mt-3">De: Ambodirano Sud Lot123</li>
+           <li className="mt-3">De: {parcel.from} </li>
            <hr className="h-[14px] border-none"/>
-           <li className="mt-3">Poids: 20kg</li>
+           <li className="mt-3">Poids:{parcel.weight} </li>
            <hr className="h-[14px] border-none"/>
-           <li className="mt-3">Date: 20/06/2025</li>
+           <li className="mt-3">Date:{parcel.date} </li>
            <hr className="h-[14px] border-none"/>
-           <li className="mt-3">Expediteur: Gonadelo</li>
+           <li className="mt-3">Expediteur: {parcel.sendername}</li>
            <hr className="h-[14px] border-none"/>
-           <li className="mt-3">A: 67ha Antananarivo</li>
+           <li className="mt-3">A:{parcel.to} </li>
            <hr className="h-[14px] border-none"/>
-           <li className="mt-3">Prix: 20000Ar</li>
+           <li className="mt-3">Prix:{parcel.cost} </li>
            <hr className="h-[14px] border-none"/>
-           <li className="mt-3">Destinataire: Razaza Kelyy</li>
+           <li className="mt-3">Destinataire: {parcel.recepiantname}</li>
            <hr className="h-[14px] border-none"/>
-           <li className="mt-3">Matricul Voiture: 34789LM</li>
+           <li className="mt-3">Colis ID:{parcel._id} </li>
            <hr className="h-[14px] border-none"/>
-           <li className="mt-3">Note: Vraiment Fragile</li>
+           <li className="mt-3">Note: { parcel.note}</li>
              
           </ul>
-          <button className="bg-[#555] text-[#fff] w-[200px] cursor-pointer p-[10px] m-[20px]">En Attente</button>
+         <button className={parcel.status === "1" ?"bg-[#45de52]] text-[#fff] w-[100px] cursor-pointer p-[5px]":"bg-[#555] text-[#fff] w-[100px] cursor-pointer p-[5px]" }>
+              {parcel.status === "1" ? "Livré" : "En Livraison"}
+              </button>
 
         </div>
         <div className="flex-1">
           <ul className="m-[3px] text-[#444] list-none p-[15px]">
-            <li className="mt-3">Email de l'envoyeur: gonadelo@gmail.com</li>
+            <li className="mt-3">Email de l'envoyeur: {parcel.senderemail}</li>
            <hr className="h-[14px] border-none"/>
-           <li className="mt-3">Email du receveur: kely@gmail.com</li>
+           <li className="mt-3">Email du receveur: {parcel.recipiantemail}</li>
 
           </ul>
            <hr className="h-[10px] border-none"/>
@@ -69,4 +95,4 @@ const Parcel = () => {
   )
 }
 
-export default Parcel
+export default Parcel;
